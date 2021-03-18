@@ -11,6 +11,56 @@
 
 <body>
 
+<nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Examen Primer Parcial (Dong Jorge)</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  </div>
+</nav>
+
+<main class="container">
+  <div class="bg-light p-5 rounded">
+    <h1>Analizar tono del texto </h1>
+    <form>
+  <div class="mb-3">
+    <label class="form-label">Escribir texto:</label>
+    <input type="text" class="form-control" id="text_to" >
+  </div>
+  <button type="button" class="btn btn-primary" onclick="analizarTexto()" >Analizar</button>
+</form>
+  <br>
+  <h2>Respuesta:</h2>
+  <p id="resp" class="lead"></p>
+  </div>
+</main>
+
+</body>
+
+
+<script>
+
+function analizarTexto(){
+
+  let text_to =  document.getElementById("text_to").value;
+  let obj = {
+    text: text_to
+  }
+  $.ajax({                        
+           type: "POST",                 
+           url: "https://cloudfoundry-examen1-jadll.us-south.cf.appdomain.cloud/analize-text",                     
+           data: obj, 
+           success: function(data){
+              document.getElementById("resp").innerHTML = JSON.stringify(data);
+              console.log(data)               
+           }
+    });
+
+
+}
+
+</script>
 
 </html>
 

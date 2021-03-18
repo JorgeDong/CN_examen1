@@ -13,7 +13,7 @@ const { json, urlencoded } = express
 const app = express()
 
 // definimos un puerto por el cual escucharemos peticiones
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT ||  8080
 const HOST = process.env.HOST || "0.0.0.0"
 
 // configuraciones para nuestro server
@@ -40,4 +40,4 @@ let handleRequest = (request, response) => {
     });
 };
 
-http.createServer(handleRequest).listen(8000);
+http.createServer(handleRequest).listen(PORT);
