@@ -23,14 +23,8 @@ app.use(cors(corsOptions))
 
 // indicamos que usaremos un router
 app.get('/', function (req, res) {
-	res.send(process.env.DB_HOST);
+	res.send("Microservicio que se comunica con ToneAnalyzer");
 });
-
-app.post('/qq', function (req, res) {
-  console.log(req.body.text)
-  res.send(req.body);
-});
-
 
 const toneAnalyzer = new ToneAnalyzerV3({
   version: '2017-09-21',
@@ -43,32 +37,23 @@ const toneAnalyzer = new ToneAnalyzerV3({
 // indicamos que usaremos un router
 app.post('/analize-text', function (req, res) {
 
-const text = req.body.text;
+  const text = req.body.text;
 
-const toneParams = {
-  toneInput: { 'text': text },
-  contentType: 'application/json',
-};
+  const toneParams = {
+    toneInput: { 'text': text },
+    contentType: 'application/json',
+  };
 
-toneAnalyzer.tone(toneParams)
-  .then(toneAnalysis => {
-    console.log(JSON.stringify(toneAnalysis, null, 2));
-
-    //res.send(JSON.stringify(toneAnalysis, null, 2));
-    res.send(toneAnalysis.result);
-
-  })
-  .catch(err => {
-    console.log('error:', err);
-  });
-
-	
-  });
-
-app.get('/analize-text', function (req, res) {
-
- });
-
+  toneAnalyzer.tone(toneParams)
+    .then(toneAnalysis => {
+      console.log(JSON.stringify(toneAnalysis, null, 2));
+      res.send(toneAnalysis.result);
+    })
+    .catch(err => {
+      console.log('error:', err);
+      res.send(err);
+    });	
+});
 
 
 // iniciamos nuestro server
