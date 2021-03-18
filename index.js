@@ -1,13 +1,8 @@
 // importamos las librerias importantes
 const express = require('express')
 const cors = require('cors')
-var util = require('util');
-var exec = require('child_process').exec;
-const fs = require('fs');
-
 const ToneAnalyzerV3 = require('ibm-watson/tone-analyzer/v3');
 const { IamAuthenticator } = require('ibm-watson/auth');
-
 require('dotenv').config();
 
 // de express nos traemos lo necesario
@@ -28,31 +23,27 @@ app.use(cors(corsOptions))
 
 // indicamos que usaremos un router
 app.get('/', function (req, res) {
+	res.send(process.env.DB_HOST);
+});
 
-res.send(process.env.DB_HOST);
-
+app.post('/qq', function (req, res) {
+  console.log(req.body.text)
+  res.send(req.body);
 });
 
 
 const toneAnalyzer = new ToneAnalyzerV3({
   version: '2017-09-21',
   authenticator: new IamAuthenticator({
-    apikey: process.env.API_KEY,
+    	apikey: process.env.API_KEY,
   }),
   serviceUrl: process.env.URL_TEXT_ANALYZER,
 });
 
-
-
-
-
 // indicamos que usaremos un router
-app.get('/env', function (req, res) {
+app.post('/analize-text', function (req, res) {
 
-const text = 'Team, I know that times are tough! Product '
-  + 'sales have been disappointing for the past three '
-  + 'quarters. We have a competitive product, but we '
-  + 'need to do a better job of selling it!';
+const text = req.body.text;
 
 const toneParams = {
   toneInput: { 'text': text },
@@ -72,9 +63,11 @@ toneAnalyzer.tone(toneParams)
   });
 
 	
-
-
   });
+
+app.get('/analize-text', function (req, res) {
+
+ });
 
 
 
