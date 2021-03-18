@@ -1,8 +1,9 @@
 // importamos las librerias importantes
 const express = require('express')
 const cors = require('cors')
-const ToneAnalyzerV3 = require('ibm-watson/tone-analyzer/v3');
-const { IamAuthenticator } = require('ibm-watson/auth');
+const fs = require('fs');
+
+
 require('dotenv').config();
 
 // de express nos traemos lo necesario
@@ -21,55 +22,5 @@ app.use(urlencoded({ extended: false }))
 const corsOptions = { origin: '*', optionsSuccessStatus: 200 }
 app.use(cors(corsOptions))
 
-// indicamos que usaremos un router
-app.get('/', function (req, res) {
-	res.send(process.env.DB_HOST);
-});
 
-app.post('/qq', function (req, res) {
-  console.log(req.body.text)
-  res.send(req.body);
-});
-
-
-const toneAnalyzer = new ToneAnalyzerV3({
-  version: '2017-09-21',
-  authenticator: new IamAuthenticator({
-    	apikey: process.env.API_KEY,
-  }),
-  serviceUrl: process.env.URL_TEXT_ANALYZER,
-});
-
-// indicamos que usaremos un router
-app.post('/analize-text', function (req, res) {
-
-const text = req.body.text;
-
-const toneParams = {
-  toneInput: { 'text': text },
-  contentType: 'application/json',
-};
-
-toneAnalyzer.tone(toneParams)
-  .then(toneAnalysis => {
-    console.log(JSON.stringify(toneAnalysis, null, 2));
-
-    //res.send(JSON.stringify(toneAnalysis, null, 2));
-    res.send(toneAnalysis.result);
-
-  })
-  .catch(err => {
-    console.log('error:', err);
-  });
-
-	
-  });
-
-app.get('/analize-text', function (req, res) {
-
- });
-
-
-
-// iniciamos nuestro server
-app.listen(PORT,HOST, () => { console.log(`Server listening on port ${PORT} and host ${HOST}`); })
+http.createServer(handleRequest).listen(8000);
