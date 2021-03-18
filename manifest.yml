@@ -1,0 +1,4 @@
+applications:
+- name: cloudfoundry-examen1-jadll
+  random-route: true
+  memory: 64M

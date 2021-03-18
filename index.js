@@ -1,4 +1,61 @@
-var express = require("express");
-var app = express();
-var cfenv = require("cfenv");
-var bodyParser = require('body-parser')
+// importamos las librerias importantes
+const express = require('express')
+const cors = require('cors')
+var util = require('util');
+var exec = require('child_process').exec;
+
+
+require('dotenv').config();
+
+// de express nos traemos lo necesario
+const { json, urlencoded } = express
+
+// creamos nuestra app
+const app = express()
+
+// definimos un puerto por el cual escucharemos peticiones
+const PORT = process.env.PORT || 3000
+const HOST = process.env.HOST || "0.0.0.0"
+
+// configuraciones para nuestro server
+app.use(json())
+app.use(urlencoded({ extended: false }))
+const corsOptions = { origin: '*', optionsSuccessStatus: 200 }
+app.use(cors(corsOptions))
+
+// indicamos que usaremos un router
+app.get('/', function (req, res) {
+
+var command = ''
+
+child = exec(command, function(error, stdout, stderr){
+	console.log('stdout: ' + stdout);
+	console.log('stderr: ' + stderr);
+
+
+	res.send(stdout);
+
+	if(error !== null) {
+	    console.log('exec error: ' + error);
+	}
+});
+
+
+});
+
+
+// indicamos que usaremos un router
+app.get('/env', function (req, res) {
+
+
+
+	res.send(process.env.DB_HOST);
+
+
+});
+
+
+
+
+// iniciamos nuestro server
+app.listen(PORT,HOST, () => { console.log(`Server listening on port ${PORT} and host ${HOST}`); })
